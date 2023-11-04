@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: quarkus
+spec:
+  description: Use the quarkus CLI
+  workspaces:
+    - name: project-dir
+      description: A workspace for the task
+      optional: true
+      mountPath: /mnt/workspace
+  params:
+    - name: ARGS
+      description: Command arguments
+      type: array
+      default: 
+        - "version"
+  steps:
+    - name: quarkus
+      image: iocanel/quarkus-cli
+      workingDir: $(workspaces.project-dir.path)
+      command:
+        - quarkus
+      args: 
+        - "$(params.ARGS)"

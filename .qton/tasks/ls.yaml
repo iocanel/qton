@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: ls
+spec:
+  description: Lists all files in the workspace.
+  workspaces:
+    - name: project-dir
+      description: A workspace for the task
+      optional: true
+      mountPath: /mnt/workspace
+  params:
+    - name: ARGS
+      description: Command arguments
+      type: array
+      default: 
+        - "."
+  steps:
+    - name: ls
+      image: ubuntu
+      workingDir: $(workspaces.project-dir.path)
+      command:
+        - ls
+      args: 
+        - "$(params.ARGS)"

@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: git
+spec:
+  description: Calls git
+  workspaces:
+    - name: project-dir
+      description: A workspace for the task
+      optional: true
+      mountPath: /mnt/workspace
+  params:
+    - name: ARGS
+      description: Command arguments
+      type: array
+      default: 
+        - ""
+  steps:
+    - name: git
+      image: bitnami/git
+      workingDir: $(workspaces.project-dir.path)
+      command:
+        - git
+      args: 
+        - "$(params.ARGS)"

@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: rm
+spec:
+  description: Removes files in the workspace.
+  workspaces:
+    - name: project-dir
+      description: A workspace for the task
+      optional: true
+      mountPath: /mnt/workspace
+  params:
+    - name: ARGS
+      description: Command arguments
+      type: array
+      default: 
+        - "."
+  steps:
+    - name: rm
+      image: ubuntu
+      workingDir: $(workspaces.project-dir.path)
+      command:
+        - rm
+      args: 
+        - "$(params.ARGS)"
